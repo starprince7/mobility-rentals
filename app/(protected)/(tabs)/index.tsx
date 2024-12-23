@@ -1,10 +1,21 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, ScrollView } from "react-native";
+import React from "react";
+import {
+  Header,
+  SearchBarInput,
+  TopBrands,
+  VehicleListings,
+} from "@/components";
 
 export default function index() {
   return (
-    <View>
-      <Text>index</Text>
-    </View>
-  )
+    <ScrollView className="flex-1">
+      <View className="bg-black pt-20 h-80">
+        <Header />
+        <SearchBarInput />
+        <TopBrands />
+      </View>
+      <VehicleListings />
+    </ScrollView>
+  );
 }
