@@ -1,23 +1,34 @@
+import { ComponentProps } from "react";
 import { View } from "react-native";
+import Animated from "react-native-reanimated";
 
 export function StackView(props: {
   children: React.ReactNode;
   direction?: "horizontal" | "vertical";
+  entering?: ComponentProps<typeof Animated.View>["entering"];
   className?: string;
 }) {
-  const { children, direction = "vertical", className } = props;
+  const { children, direction = "vertical", className, entering } = props;
 
   if (direction === "horizontal")
     return (
-      <View {...props} className={`${className} flex-row items-center`}>
+      <Animated.View
+        entering={entering}
+        {...props}
+        className={`${className} flex-row items-center`}
+      >
         {children}
-      </View>
+      </Animated.View>
     );
 
   if (direction === "vertical")
     return (
-      <View {...props} className={`${className} flex-col justify-center`}>
+      <Animated.View
+        entering={entering}
+        {...props}
+        className={`${className} flex-col justify-center`}
+      >
         {children}
-      </View>
+      </Animated.View>
     );
 }

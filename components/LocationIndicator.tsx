@@ -6,7 +6,7 @@ interface Props {
   className?: string;
   iconColor?: string;
   iconSize?: number;
-  value: string[];
+  value: string[] | string;
 }
 
 export function LocationIndicator({
@@ -16,11 +16,20 @@ export function LocationIndicator({
   iconSize,
 }: Props) {
   if (!value?.length) return null;
+  if (Array.isArray(value))
+    return (
+      <StackView direction="horizontal" className="gap-1.5">
+        <MapPinIcon size={iconSize || 16} color={iconColor} />
+        <FancyText className={`${className} font-bold text-sm`}>
+          {value[0]}-{value[1]}
+        </FancyText>
+      </StackView>
+    );
   return (
     <StackView direction="horizontal" className="gap-1.5">
       <MapPinIcon size={iconSize || 16} color={iconColor} />
       <FancyText className={`${className} font-bold text-sm`}>
-        {value[0]}-{value[1]}
+        {value}
       </FancyText>
     </StackView>
   );

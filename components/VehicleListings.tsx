@@ -13,7 +13,7 @@ export function VehicleListings() {
     <View className="m-6">
       <FancyText>Available Cars</FancyText>
       <FlashList
-        numColumns={2}
+        numColumns={1}
         renderItem={({ item, index }) => <VehicleCard {...(item as any)} index={index} />}
         estimatedItemSize={50}
         data={new Array(10).fill({})}

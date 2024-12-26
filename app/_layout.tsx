@@ -1,10 +1,14 @@
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { Provider } from "react-redux";
+import { useFonts } from "expo-font";
+import { useEffect } from "react";
 
 // Native Wind CSS
 import "../global.css";
-import { useFonts } from "expo-font";
-import { useEffect } from "react";
+
+// Redux Store
+import { store } from "@/store";
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -26,7 +30,7 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <Provider store={store}>
       <Stack>
         <Stack.Screen
           name="(protected)/(tabs)"
@@ -38,7 +42,11 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="(protected)/details/index"
-          options={{ headerShown: false, presentation: 'modal' }}
+          options={{ headerShown: false, presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="(protected)/booking"
+          options={{ headerShown: false, presentation: "modal" }}
         />
         <Stack.Screen
           name="(protected)/(tabs)/profile"
@@ -48,6 +56,6 @@ export default function RootLayout() {
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
-    </>
+    </Provider>
   );
 }
