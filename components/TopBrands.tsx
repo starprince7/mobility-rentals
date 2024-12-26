@@ -22,7 +22,7 @@ const images = [
 export function TopBrands() {
   return (
     <View className="mt-3 gap-3 relative">
-      <FancyText className="text-white text-sm ml-6">Top Brands</FancyText>
+      <FancyText className="text-black text-sm ml-6">Top Brands</FancyText>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -32,22 +32,7 @@ export function TopBrands() {
           <Avatar size="large" localSource={source} key={i} />
         ))}
       </ScrollView>
-      <View className="flex-row absolute w-full top-7 justify-between pointer-events-none">
-        <LinearGradient
-          colors={["black", "transparent"]}
-          start={{ x: 0, y: 0 }}
-          // end={{ x: 1, y: 0 }}
-          // className="w-6 h-14 min-h-10"
-          style={styles.leftGradient}
-        />
 
-        <LinearGradient
-          colors={["transparent", "black"]}
-          // start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.rightGradient}
-        />
-      </View>
     </View>
   );
 }

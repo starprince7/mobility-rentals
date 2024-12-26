@@ -10,8 +10,8 @@ export function VehicleListings() {
   const { width, height } = useWindowDimensions();
 
   return (
-    <View className="m-6">
-      <FancyText>Available Cars</FancyText>
+    <View className="mx-6">
+      <FancyText className="text-gray-600">Available Cars</FancyText>
       <FlashList
         numColumns={1}
         renderItem={({ item, index }) => <VehicleCard {...(item as any)} index={index} />}

@@ -9,8 +9,8 @@ import {
 
 export default function index() {
   return (
-    <ScrollView className="flex-1">
-      <View className="bg-black pt-20 h-80">
+    <ScrollView className="flex-1 bg-white">
+      <View className=" pt-[68px] h-80">
         <Header />
         <SearchBarInput />
         <TopBrands />
