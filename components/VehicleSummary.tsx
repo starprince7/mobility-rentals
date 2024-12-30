@@ -1,15 +1,22 @@
-import { View, Text } from "react-native";
 import React from "react";
-import { NiceImage, StackView } from "./ui";
-
-const yellowCar = require("@/assets/images/yellow-car.png");
+import { View, Text } from "react-native";
+import { useSelector } from "react-redux";
+import { NiceImageCarousel, StackView } from "./ui";
+import { selectVehicleDetail } from "@/store/vehicleSlice/reducer";
 
 export function VehicleSummary() {
+  const { networkRequestStatus, vehicleDetail } =
+    useSelector(selectVehicleDetail);
   return (
     <View className="mx-6 my-3">
       <StackView direction="horizontal" className="justify-between">
-        <NiceImage source={yellowCar} className="w-52 h-28 rounded-3xl" />
-        <Text className="font-semibold text-lg">2021 Toyota Camry</Text>
+        <NiceImageCarousel
+          images={vehicleDetail?.images}
+          className="w-52 h-28 rounded-3xl"
+        />
+        <Text className="font-semibold text-lg">
+          {vehicleDetail?.make} {vehicleDetail?.model} {vehicleDetail?.year}
+        </Text>
       </StackView>
     </View>
   );

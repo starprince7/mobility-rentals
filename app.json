@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "castme",
-    "slug": "castme",
+    "name": "rentit",
+    "slug": "rentit",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "renit",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -32,7 +32,17 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "your_merchant_identifier",
+          "enableGooglePay": true
+        }
       ]
+    ],
+    "permissions": [
+      "INTERNET"
     ],
     "experiments": {
       "typedRoutes": true

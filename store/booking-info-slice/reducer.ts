@@ -4,12 +4,14 @@ interface BookingInformation {
   startDate: string;
   endDate: string;
   numberOfDays: number;
+  totalPrice: number;
 }
 
-const initialState: any = {
+const initialState: BookingInformation = {
   startDate: "",
   endDate: "",
   numberOfDays: 0,
+  totalPrice: 0,
 };
 
 const slice = createSlice({
@@ -20,6 +22,7 @@ const slice = createSlice({
       state.startDate = "";
       state.endDate = "";
       state.numberOfDays = 0;
+      state.totalPrice = 0;
     },
     setBookingStartDate: (
       state,
@@ -29,25 +32,29 @@ const slice = createSlice({
     },
     setBookingEndDate: (
       state,
-      action: PayloadAction<BookingInformation["startDate"]>
+      action: PayloadAction<BookingInformation["endDate"]>
     ) => {
-      state.startDate = action.payload;
+      state.endDate = action.payload;
     },
     setBookingDays: (
       state,
-      action: PayloadAction<BookingInformation["startDate"]>
+      action: PayloadAction<BookingInformation["numberOfDays"]>
     ) => {
       state.numberOfDays = action.payload;
+    },
+    setBookingTotalPrice: (state, action: PayloadAction<number>) => {
+      state.totalPrice = action.payload;
     },
   },
 });
 
 export const selectBookingInformation = (store: any) =>
-  store.BookingInformation as "BookingInformation";
+  store.BookingInformation as BookingInformation;
 export const {
   eraseBookingInformationState,
   setBookingDays,
   setBookingEndDate,
   setBookingStartDate,
+  setBookingTotalPrice,
 } = slice.actions;
 export default slice.reducer;

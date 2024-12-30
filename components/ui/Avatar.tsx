@@ -5,7 +5,7 @@ import { NiceImage } from "./NiceImage";
 interface AvatarProps {
   uri?: string;
   localSource?: ImageSourcePropType;
-  size: "tiny" | "small" | "large";
+  size: "tiny" | "small" | "large" | "larger";
 }
 
 export function Avatar(props: AvatarProps) {
@@ -16,7 +16,9 @@ export function Avatar(props: AvatarProps) {
       ? styles.tiny
       : size === "small"
       ? styles.small
-      : styles.large;
+      : size === "large"
+      ? styles.large
+      : styles.larger;
 
   if (localSource) {
     return (
@@ -37,4 +39,5 @@ const styles = StyleSheet.create({
   tiny: { width: 27, height: 27 },
   small: { width: 37, height: 37 },
   large: { width: 47, height: 47 },
+  larger: { width: 94, height: 94 },
 });

@@ -11,13 +11,12 @@ import {
 
 export function DateRangePicker() {
   const dispatch = useDispatch();
-  
+
   const selectFromDate = (event: any, selectedDate: any) => {
     dispatch(setBookingStartDate(selectedDate)); // From Date: 2024-12-24T02:32:07.684Z
   };
 
   const selectToDate = (event: any, selectedDate: any) => {
-    console.log("To Date:", selectedDate);
     dispatch(setBookingEndDate(selectedDate)); // To Date: 2024-12-26T02:39:00.000Z
   };
 

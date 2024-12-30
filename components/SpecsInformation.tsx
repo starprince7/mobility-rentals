@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { FancyText, StackView } from "./ui";
 import {
   TicketIcon,
@@ -54,7 +54,15 @@ const carSpecs = [
   },
 ];
 
-export function VehicleSpecs() {
+interface IFeatures {
+  name: string;
+  value: string;
+}
+
+type Props = {
+  features: IFeatures[] | undefined;
+};
+export function VehicleSpecs({ features }: Props) {
   return (
     <View className="mx-6 mb-2 border-t-2 border-neutral-200 pt-2">
       <FancyText className="font-semibold text-neutral-400 mb-3 pb-2">
@@ -68,20 +76,14 @@ export function VehicleSpecs() {
           <SpecCard {...(item as any)} index={index} />
         )}
         estimatedItemSize={50}
-        data={carSpecs}
+        data={features}
         contentContainerStyle={{ paddingBottom: 100 }}
       />
     </View>
   );
 }
 
-interface SpecCardProps {
-  label: string;
-  value: string;
-  icon?: React.ReactNode;
-  index: number;
-}
-function SpecCard({ icon, label, value, index }: SpecCardProps) {
+function SpecCard({ name, value, index }: IFeatures & { index: number }) {
   const isEven = index % 2 == 0;
   return (
     <Animated.View
@@ -96,12 +98,10 @@ function SpecCard({ icon, label, value, index }: SpecCardProps) {
       <StackView direction="horizontal" className="gap-2">
         <View className="items-center">
           <View className="rounded-full bg-white p-1 self-start">
-            {icon || <TicketIcon color="black" />}
+            <CogIcon color="#171717" />
           </View>
         </View>
-        <FancyText className="my-2 text-neutral-500 text-sm">
-          {label || "Engine"}
-        </FancyText>
+        <FancyText className="my-2 text-neutral-500 text-sm">{name}</FancyText>
       </StackView>
       <FancyText className="text-lg self-end mt-6">
         {value || "4.4L - 320hp"}

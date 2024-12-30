@@ -12,6 +12,17 @@ function getDaysBetweenDates(
   days: number;
   exactDays: number;
 } {
+  if (!fromDate)
+    return {
+      days: 0,
+      exactDays: 0,
+    };
+
+  if (!toDate)
+    return {
+      days: 0,
+      exactDays: 0,
+    };
   try {
     // Convert input dates to Date objects
     const startDate = fromDate instanceof Date ? fromDate : new Date(fromDate);

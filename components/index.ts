@@ -11,3 +11,4 @@ export * from "./OwnerView";
 export * from "./DateRangePicker";
 export * from "./VehicleSummary";
 export * from "./PriceDetails";
+export * from "./PayWithStripeButton";
