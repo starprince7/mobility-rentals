@@ -8,7 +8,7 @@ const localSource = require("@/assets/images/avatar-portrait.jpg");
 export default function profileScreen() {
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 gap-10 mx-6 mt-6">
+      <View className="flex-1 gap-10 mx-6 mt-6 android:mt-16">
         <StackView direction="horizontal" className="gap-5">
           <Avatar size="larger" localSource={localSource} />
           <StackView direction="vertical" className="gap-2">
@@ -32,18 +32,18 @@ export default function profileScreen() {
             </StackView>
           </StackView>
         </StackView>
-        <StackView direction="horizontal" className="gap-20 justify-between">
+        <StackView direction="vertical" className="gap-5 justify-between">
           <StackView direction="vertical" className="gap-2">
             <FancyText className="text-base text-neutral-500">
-              Active Earnings
+              Contact detail
             </FancyText>
-            <FancyText className="text-2xl">$100.00</FancyText>
+            <FancyText className="text-2xl">+44 234 567 89</FancyText>
           </StackView>
           <StackView direction="vertical" className="gap-2">
             <FancyText className="text-base text-neutral-500">
-              Listings
+              Email
             </FancyText>
-            <FancyText className="text-2xl">30</FancyText>
+            <FancyText className="text-2xl">johndoe@gmail.com</FancyText>
           </StackView>
         </StackView>
       </View>

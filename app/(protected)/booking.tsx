@@ -18,7 +18,9 @@ import { PaymentSheetError, StripeError } from "@stripe/stripe-react-native";
 export default function BookingScreen() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const {} = useSelector(selectBookingInformation);
+  const { endDate, numberOfDays, startDate, totalPrice } = useSelector(
+    selectBookingInformation
+  );
   const handlePaymentSuccess = async () => {
     // create booking and inform the user of their successful booking creation
     // 1. POST booking information
@@ -28,7 +30,9 @@ export default function BookingScreen() {
     // 3. navigate a to a booking success screen
     router.push("/(protected)/booking-success");
   };
-  const handlePaymentFailure = (error: StripeError<PaymentSheetError> | undefined) => {
+  const handlePaymentFailure = (
+    error: StripeError<PaymentSheetError> | undefined
+  ) => {
     // Move to a different screen or show an alert to the user
     alert(`Payment failed. for some random reason. Reason: ${error?.message}`);
   };

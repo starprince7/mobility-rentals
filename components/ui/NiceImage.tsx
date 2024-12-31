@@ -42,7 +42,8 @@ export function NiceImage({
         // Generate a unique filename based on the URI
         const hash = sha256(uri);
         const ext = uri.substring(uri.lastIndexOf("."));
-        const filename = `${hash}${ext}`;
+        // Ensure we don't include paths in filename
+        const filename = `${hash}${ext.split('/').pop()}`;
         const cacheFolder = `${FileSystem.cacheDirectory}images/`;
         const cacheFilepath = `${cacheFolder}${filename}`;
 

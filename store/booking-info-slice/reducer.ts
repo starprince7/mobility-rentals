@@ -1,15 +1,15 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface BookingInformation {
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   numberOfDays: number;
   totalPrice: number;
 }
 
 const initialState: BookingInformation = {
-  startDate: "",
-  endDate: "",
+  startDate: new Date(),
+  endDate: new Date(),
   numberOfDays: 0,
   totalPrice: 0,
 };
@@ -19,8 +19,8 @@ const slice = createSlice({
   initialState,
   reducers: {
     eraseBookingInformationState: (state) => {
-      state.startDate = "";
-      state.endDate = "";
+      state.startDate = new Date();
+      state.endDate = new Date();
       state.numberOfDays = 0;
       state.totalPrice = 0;
     },

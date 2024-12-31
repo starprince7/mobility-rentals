@@ -35,14 +35,6 @@ export default function RootLayout() {
   }
 
 
-  const handleDeepLink = (event: { url: string }) => {
-    // Handle the return URL here
-    if (event.url.includes("booking-success")) {
-      // Payment successful logic
-      alert("Handle Payment successful");
-    }
-  };
-
   return (
     <QueryClientProvider client={queryClient}>
       <StripeConfigProvider>
@@ -51,7 +43,7 @@ export default function RootLayout() {
             <Stack>
               <Stack.Screen
                 name="(protected)/(tabs)"
-                options={{ headerShown: false }}
+                options={{ headerShown: false, presentation: "card" }}
               />
               <Stack.Screen
                 name="(protected)/(tabs)/create-listing"

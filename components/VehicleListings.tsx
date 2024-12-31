@@ -1,14 +1,20 @@
 import React from "react";
-import { View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
-import { FancyText } from "./ui";
+import { FancyText, StackView } from "./ui";
 import { VehicleCard } from "./VehicleCard";
 import { useVehicleListing } from "@/hooks";
 import { IAvailableVehicles } from "@/types";
 
 export function VehicleListings() {
-  const { data } = useVehicleListing();
+  const { data, isLoading } = useVehicleListing();
+
+  if (isLoading) return (
+    <StackView direction="vertical" className='justify-center mt-40'>
+      <ActivityIndicator />
+    </StackView>
+  )
 
   return (
     <View className="mx-6">

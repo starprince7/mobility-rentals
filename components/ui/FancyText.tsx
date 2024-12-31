@@ -1,4 +1,4 @@
-import { Text, View, FlexStyle } from "react-native";
+import { Text, View, FlexStyle, Platform } from "react-native";
 import React, { ComponentProps } from "react";
 
 interface Props extends ComponentProps<typeof Text> {
@@ -10,18 +10,18 @@ interface Props extends ComponentProps<typeof Text> {
 }
 
 export function FancyText(props: Props) {
-  const { 
-    startIcon, 
-    endIcon, 
-    children, 
-    justifyContent = "flex-start", 
+  const {
+    startIcon,
+    endIcon,
+    children,
+    justifyContent = "flex-start",
     alignItems = "center",
     style,
-    ...restProps 
+    ...restProps
   } = props;
 
   const containerStyle = {
-    flexDirection: 'row' as const,
+    flexDirection: "row" as const,
     justifyContent,
     alignItems,
     gap: 4, // equivalent to gap-1 in tailwind
@@ -65,6 +65,6 @@ export function FancyText(props: Props) {
 
 const styles = {
   fancyText: {
-    fontFamily: "Poppins",
+    fontFamily: Platform.OS === "android" ? "Ledger" : "Poppins",
   },
 };

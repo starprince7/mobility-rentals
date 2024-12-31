@@ -1,5 +1,13 @@
 import React, { useEffect } from "react";
-import { View, ScrollView, Pressable, ActivityIndicator } from "react-native";
+import {
+  View,
+  ScrollView,
+  Pressable,
+  ActivityIndicator,
+  SafeAreaView,
+  Dimensions,
+  Platform,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import {
   FancyText,
@@ -42,7 +50,7 @@ export default function VehicleDetailScreen() {
     );
 
   return (
-    <>
+    <SafeAreaView className="flex-1">
       <StatusBar style="light" />
       <ScrollView contentContainerClassName="pb-60" className="flex-1">
         <NiceImageCarousel
@@ -65,7 +73,7 @@ export default function VehicleDetailScreen() {
         />
       </ScrollView>
       <PriceQuoteFixed price={vehicleDetail?.rentalPricePerDay as number} />
-    </>
+    </SafeAreaView>
   );
 }
 
@@ -91,12 +99,12 @@ function VehicleModelName({
   );
 }
 
-function LoveButton() {
+const LoveButton = React.memo(() => {
   const [isLoved, setIsLoved] = React.useState(false);
 
-  const handleLike = () => {
+  const handleLike = React.useCallback(() => {
     setIsLoved((prev) => !prev);
-  };
+  }, []);
 
   if (!isLoved)
     return (
@@ -104,13 +112,12 @@ function LoveButton() {
         <HeartIconOutline color="black" />
       </Pressable>
     );
-  if (isLoved)
-    return (
-      <Pressable onPress={handleLike}>
-        <HeartIcon color="black" />
-      </Pressable>
-    );
-}
+  return (
+    <Pressable onPress={handleLike}>
+      <HeartIcon color="black" />
+    </Pressable>
+  );
+});
 
 function Description({ content }: { content: string }) {
   return (
@@ -119,37 +126,50 @@ function Description({ content }: { content: string }) {
         Description
       </FancyText>
       <View className="px-6 border border-neutral-300 bg-neutral-200 py-6 mb-2 mt-1 rounded-3xl">
-        <ScrollView className="h-80">
-          <FancyText className="">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque
-            maiores, optio exercitationem officia, quam cum doloribus aliquid,
-            perspiciatis debitis illum placeat tempore asperiores!
-            Necessitatibus est eligendi vitae, recusandae expedita
-            exercitationem. Similique hic commodi deleniti quod placeat
-            blanditiis magni maiores aliquam reiciendis quos recusandae, atque
-            earum!
-          </FancyText>
-        </ScrollView>
+        <View className="max-h-80">
+          <FancyText className="">{content}</FancyText>
+        </View>
       </View>
     </View>
   );
 }
 
 function PriceQuoteFixed({ price }: { price: number }) {
+  const { height } = Dimensions.get("screen");
+
+  // Dynamically calculate bottom position
+  const calculatedAndroidTopHeight = height * 0.8; // Place at 82% of screen height
+  const calculatedIosTopHeight = height * 0.77; // Place at 77% of screen height
+
   return (
-    <StackView
-      direction="horizontal"
-      className="pb-16 absolute w-full bottom-12 bg-white justify-between items-baseline px-6"
+    <View
+      style={{
+        position: "absolute",
+        top:
+          Platform.OS === "ios"
+            ? calculatedIosTopHeight
+            : calculatedAndroidTopHeight, // Use calculated value here
+        width: "100%",
+        height: "100%",
+        backgroundColor: "white",
+        paddingBottom: 24, // Equivalent to `pb-6`
+        paddingHorizontal: 24, // Equivalent to `px-6`
+      }}
     >
-      <StackView direction="horizontal" className="gap-1.5">
-        <FancyText className="text-3xl font-bold">
-          {formatToCurrency(price, "USD")}
-        </FancyText>
-        <FancyText className="text-sm text-neutral-500">/ 1 Day</FancyText>
+      <StackView
+        direction="horizontal"
+        className="justify-between items-baseline w-full"
+      >
+        <StackView direction="horizontal" className="gap-1.5">
+          <FancyText className="text-3xl font-bold">
+            {formatToCurrency(price, "USD")}
+          </FancyText>
+          <FancyText className="text-sm text-neutral-500">/ 1 Day</FancyText>
+        </StackView>
+        <Link asChild href="/(protected)/booking">
+          <NiceButton className="w-52">Rent</NiceButton>
+        </Link>
       </StackView>
-      <Link asChild href="/(protected)/booking">
-        <NiceButton className="w-52">Rent</NiceButton>
-      </Link>
-    </StackView>
+    </View>
   );
 }
