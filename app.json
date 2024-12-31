@@ -13,6 +13,7 @@
       "bundleIdentifier": "com.starprince.renit"
     },
     "android": {
+      "package": "com.starprince.renit",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -47,6 +48,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "3cbc82b3-c641-42ad-a222-6b06e89a8f3d"
+      }
     }
   }
 }
