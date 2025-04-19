@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import { useSelector } from "react-redux";
 import { NiceImageCarousel, StackView } from "./ui";
-import { selectVehicleDetail } from "@/store/vehicleSlice/reducer";
+import { selectVehicleDetail } from "@/store/vehicle-data/reducer";
 
 export function VehicleSummary() {
   const { networkRequestStatus, vehicleDetail } =

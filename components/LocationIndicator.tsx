@@ -1,6 +1,7 @@
 import React from "react";
 import { FancyText, StackView } from "./ui";
 import { MapPinIcon } from "react-native-heroicons/solid";
+import { TreeCityIcon } from "@/assets/icons";
 
 interface Props {
   className?: string;
@@ -18,16 +19,16 @@ export function LocationIndicator({
   if (!value?.length) return null;
   if (Array.isArray(value))
     return (
-      <StackView direction="horizontal" className="gap-1.5 flex-nowrap">
-        <MapPinIcon size={iconSize || 16} color={iconColor} />
+      <StackView direction="horizontal" className="gap-2 flex-nowrap">
+        <TreeCityIcon size={iconSize || 16} color={iconColor} />
         <FancyText className={`${className} font-bold text-sm`}>
           {value[0]}-{value[1]}
         </FancyText>
       </StackView>
     );
   return (
-    <StackView direction="horizontal" className="gap-1.5 flex-nowrap">
-      <MapPinIcon size={iconSize || 16} color={iconColor} />
+    <StackView direction="horizontal" className="gap-2 flex-nowrap">
+      <TreeCityIcon size={iconSize || 16} color={iconColor} />
       <FancyText className={`${className} font-bold text-sm`}>
         {value}
       </FancyText>

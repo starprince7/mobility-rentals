@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { IAvailableVehicles } from "@/types";
+import { IVehicle } from "@/types";
 
-export function useVehicleDetail(id: string | number) {
-  return useQuery<IAvailableVehicles>({
+const HOST_URL = process.env.EXPO_PUBLIC_APP_API_URL
+
+export function useVehicleDetail(id: string | string[] | number) {
+  return useQuery<IVehicle>({
     queryKey: ["vehicleDetail", id],
     queryFn: () => fetchVehicleDetail(id),
     retry: 3,
@@ -11,9 +13,9 @@ export function useVehicleDetail(id: string | number) {
   });
 }
 
-export async function fetchVehicleDetail(id: string | number) {
+export async function fetchVehicleDetail(id: string | string[] | number) {
   try {
-    const hostUri = `https://api.starprince.dev/api/vehicle/${id}`;
+    const hostUri = `${HOST_URL}/vehicle/${id}`;
     const { data } = await axios.get(hostUri);
 
     return data;

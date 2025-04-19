@@ -41,6 +41,12 @@
           "merchantIdentifier": "your_merchant_identifier",
           "enableGooglePay": true
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app requires access your photos for you to add profile image."
+        }
       ]
     ],
     "permissions": [

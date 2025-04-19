@@ -6,7 +6,6 @@ export * from "./SearchBarInput";
 export * from "./Header";
 export * from "./VehicleListings";
 export * from "./VehicleCard";
-export * from "./SpecsInformation";
 export * from "./OwnerView";
 export * from "./DateRangePicker";
 export * from "./VehicleSummary";

@@ -4,15 +4,17 @@ import {
   HomeIcon,
   UserCircleIcon,
   PaperAirplaneIcon,
-} from "react-native-heroicons/solid";
+  HeartIcon,
+} from "react-native-heroicons/outline";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export default function BottomNavigationTab() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#fff", // add your color code as you like,
+        tabBarActiveTintColor: "black", // add your color code as you like,
         headerShown: false,
-        tabBarStyle: { backgroundColor: "black", paddingTop: 2 },
+        tabBarStyle: { backgroundColor: "intial", paddingTop: 2 },
         // tabBarButton: HapticTab,
         // tabBarBackground: TabBarBackground,
         // tabBarStyle: Platform.select({
@@ -28,23 +30,23 @@ export default function BottomNavigationTab() {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => <HomeIcon size={28} color={color} />,
+          tabBarIcon: ({ color }) => <HomeIcon size={25} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="create-listing"
+        name="favourites"
         options={{
-          title: "Create Listing",
+          title: "Favourites",
+          tabBarIcon: ({ color }) => <HeartIcon size={25} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="more"
+        options={{
+          title: "More",
           tabBarIcon: ({ color }) => (
-            <PaperAirplaneIcon size={28} color={color} />
+            <MaterialIcons name="more-horiz" size={28} color={color} />
           ),
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: "Profile",
-          tabBarIcon: ({ color }) => <UserCircleIcon size={28} color={color} />,
         }}
       />
     </Tabs>

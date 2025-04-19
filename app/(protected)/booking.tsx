@@ -12,7 +12,7 @@ import {
 import {
   eraseBookingInformationState,
   selectBookingInformation,
-} from "@/store/booking-info-slice";
+} from "@/store/booking-data";
 import { PaymentSheetError, StripeError } from "@stripe/stripe-react-native";
 
 export default function BookingScreen() {

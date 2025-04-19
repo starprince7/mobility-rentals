@@ -20,7 +20,7 @@ export default function formatToCurrency(
 
   // Format the number with no decimal places and customize separator
   // return `${currency}${numericAmount.toLocaleString("en-US", {
-  return `${numericAmount.toLocaleString("en-US", {
+  return `${numericAmount.toLocaleString("en-NG", {
     style: "currency",
     currency: currency,
     minimumFractionDigits: 0,

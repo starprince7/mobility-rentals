@@ -7,7 +7,7 @@ import {
 } from "@stripe/stripe-react-native";
 import { fetchPaymentIntent, verifyPayment } from "@/http";
 import { NiceButton } from "./ui";
-import { selectBookingInformation } from "@/store/booking-info-slice";
+import { selectBookingInformation } from "@/store/booking-data";
 import { sleep } from "@/utils";
 
 interface Props {
@@ -96,8 +96,10 @@ export function PayWithStripeButton({ onSuccess, onFailure }: Props) {
         throw new Error(`Error creating payment intent: ${paymentIntentError}`);
       }
 
-      const paymentIntentClientSecret = data.clientSecret;
-      const paymentIntentId = data.paymentIntentId;
+      const paymentIntentClientSecret = data?.clientSecret
+        ? data.clientSecret
+        : "";
+      const paymentIntentId = data?.paymentIntentId ? data.paymentIntentId : "";
 
       setPaymentState((prev) => ({
         ...prev,

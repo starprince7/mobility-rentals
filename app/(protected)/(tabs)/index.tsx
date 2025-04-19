@@ -10,8 +10,8 @@ import {
 export default function index() {
   return (
     <ScrollView className="flex-1 bg-white">
-      <View className=" pt-[68px] h-80">
-        <Header />
+      <View className=" pt-[68px] h-72">
+        {/* <Header /> */}
         <SearchBarInput />
         <TopBrands />
       </View>

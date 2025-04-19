@@ -5,7 +5,7 @@ import { MagnifyingGlassIcon } from "react-native-heroicons/solid";
 export function SearchBarInput() {
   return (
     <View className="w-full px-6 mt-4 mb-1">
-      <View className="flex-row gap-2 items-center border border-neutral-300 pl-3 py-3 rounded-xl">
+      <View className="flex-row gap-2 items-center border border-neutral-300 pl-3 py-3 rounded-full">
         <MagnifyingGlassIcon size={25} color="#737373" />
         <TextInput
           placeholder="Search for cars, brands, models..."

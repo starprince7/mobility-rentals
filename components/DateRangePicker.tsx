@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, Platform, Pressable } from "react-native";
 import { FadeInDown } from "react-native-reanimated";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { FancyText, StackView } from "./ui";
@@ -10,7 +9,7 @@ import {
   setBookingStartDate,
   setBookingEndDate,
   selectBookingInformation,
-} from "@/store/booking-info-slice";
+} from "@/store/booking-data";
 
 export function DateRangePicker() {
   const isAndroid = Platform.OS === "android";
@@ -20,26 +19,6 @@ export function DateRangePicker() {
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-  const [showStartPicker, setShowStartPicker] = useState(false);
-  const [showEndPicker, setShowEndPicker] = useState(false);
-
-  const selectFromDate = (event: any, selectedDate: any) => {
-    setShowStartPicker(false);
-
-    if (event.type === "set" && selectedDate) {
-      dispatch(setBookingStartDate(selectedDate));
-    }
-  };
-
-  const selectToDate = (event: any, selectedDate: any) => {
-    setShowEndPicker(false);
-
-    if (event.type === "set" && selectedDate) {
-      dispatch(setBookingEndDate(selectedDate));
-    }
-  };
-
-  // New Update
 
   const showStartDatePicker = () => {
     setStartDatePickerVisibility(true);
@@ -58,7 +37,7 @@ export function DateRangePicker() {
 
   const setStartDate = (date: any) => {
     console.warn("A start date has been picked: ", date);
-    dispatch(setBookingEndDate(date));
+    dispatch(setBookingStartDate(date));
     hideStartDatePicker();
   };
 
@@ -75,10 +54,7 @@ export function DateRangePicker() {
         direction="horizontal"
         className="mt-4 bg-neutral-200 border border-gray-300 justify-between mx-6 py-3 px-6 rounded-full"
       >
-        <Pressable
-          onPress={showStartDatePicker}
-          className="flex-1"
-        >
+        <Pressable onPress={showStartDatePicker} className="flex-1">
           <StackView direction="vertical">
             <FancyText className="text-gray-900 text-sm font-medium">
               From Date

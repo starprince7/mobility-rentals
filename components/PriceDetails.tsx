@@ -4,9 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { FancyText, StackView } from "./ui";
 import { formatToCurrency, getDaysBetweenDates } from "@/utils";
-import { selectVehicleDetail } from "@/store/vehicleSlice/reducer";
-import { selectBookingInformation } from "@/store/booking-info-slice";
-import { setBookingTotalPrice } from "@/store/booking-info-slice/reducer";
+import { selectVehicleDetail } from "@/store/vehicle-data/reducer";
+import { selectBookingInformation } from "@/store/booking-data";
+import { setBookingTotalPrice } from "@/store/booking-data/reducer";
 
 const SERVICE_FEE = 10;
 
@@ -38,20 +38,20 @@ export function PriceDetails() {
             Base Price x {days} {days > 1 ? "days" : "day"}
           </FancyText>
           <FancyText className="text-gray-900">
-            {formatToCurrency(rentalPrice * days, "USD")}
+            {formatToCurrency(rentalPrice * days, "NGN")}
           </FancyText>
         </StackView>
         <StackView direction="horizontal" className="justify-between">
           <FancyText className="text-gray-900">Service fee</FancyText>
           <FancyText className="text-gray-900">
-            {formatToCurrency(SERVICE_FEE, "USD")}
+            {formatToCurrency(SERVICE_FEE, "NGN")}
           </FancyText>
         </StackView>
         <View className="border-b border-gray-300" />
         <StackView direction="horizontal" className="justify-between">
-          <FancyText className="text-gray-900 text-lg">Total(USD)</FancyText>
+          <FancyText className="text-gray-900 text-lg">Total</FancyText>
           <FancyText className="text-gray-900 font-medium text-lg">
-            {formatToCurrency(rentalPrice * days + SERVICE_FEE, "USD")}
+            {formatToCurrency(rentalPrice * days + SERVICE_FEE, "NGN")}
           </FancyText>
         </StackView>
       </StackView>
