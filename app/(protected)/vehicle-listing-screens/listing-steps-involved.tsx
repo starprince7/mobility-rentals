@@ -12,6 +12,8 @@ import { selectProfileImageStore } from "@/store/profile-photo/reducer"
 import { selectDriversLicense } from "@/store/drivers-license/reducer"
 import { selectHost } from "@/store/host/reducer"
 import { checkVehicleDetailsComplete } from "@/utils"
+import { selectPayoutInformation } from "@/store/payout-data/reducer"
+import { selectSafetyStandards } from "@/store/accept-safety-standard/reducer"
 
 export default function ListingStepsInvolved() {
   // To track completed step
@@ -21,6 +23,8 @@ export default function ListingStepsInvolved() {
   const { isComplete: profilePhotoComplete } = useSelector(selectProfileImageStore)
   const { isComplete: driversLicenseComplete } = useSelector(selectDriversLicense)
   const { isComplete: goalsComplete } = useSelector(selectHost)
+  const { isComplete: payoutComplete } = useSelector(selectPayoutInformation)
+  const { isComplete: safetyStandardsComplete } = useSelector(selectSafetyStandards)
   const {
     isComplete: vehicleOnboardingComplete,
     vehicleAvailabilty,
@@ -34,6 +38,7 @@ export default function ListingStepsInvolved() {
     mileage,
     fuelType,
     transmission,
+    vehiclePhotosUploaded,
   } = useSelector(selectVehicleOnboardingStore)
 
   // Using the validation function without useMemo for more reliable updates
@@ -47,36 +52,36 @@ export default function ListingStepsInvolved() {
     vehicleType,
     seatingCapacity,
     fuelType,
-    transmission
-  });
+    transmission,
+  })
 
   // For debugging purposes - uncomment to see validation results
-  React.useEffect(() => {
-    console.log("Vehicle details validation result:", isVehicleDetailsComplete);
-    console.log("Vehicle details data:", {
-      mileage,
-      vehicleColor,
-      milesPerGallon,
-      vehicleIdentificationNumber,
-      vehicleStatus,
-      vehicleCondition,
-      vehicleType,
-      seatingCapacity,
-      fuelType,
-      transmission
-    });
-  }, [
-    mileage,
-    vehicleColor,
-    milesPerGallon,
-    vehicleIdentificationNumber,
-    vehicleStatus,
-    vehicleCondition,
-    vehicleType,
-    seatingCapacity,
-    fuelType,
-    transmission
-  ]);
+  // React.useEffect(() => {
+  //   console.log("Vehicle details validation result:", isVehicleDetailsComplete);
+  //   console.log("Vehicle details data:", {
+  //     mileage,
+  //     vehicleColor,
+  //     milesPerGallon,
+  //     vehicleIdentificationNumber,
+  //     vehicleStatus,
+  //     vehicleCondition,
+  //     vehicleType,
+  //     seatingCapacity,
+  //     fuelType,
+  //     transmission
+  //   });
+  // }, [
+  //   mileage,
+  //   vehicleColor,
+  //   milesPerGallon,
+  //   vehicleIdentificationNumber,
+  //   vehicleStatus,
+  //   vehicleCondition,
+  //   vehicleType,
+  //   seatingCapacity,
+  //   fuelType,
+  //   transmission
+  // ]);
 
   const steps = [
     { name: "Your car", isCompleted: vehicleOnboardingComplete },
@@ -89,9 +94,9 @@ export default function ListingStepsInvolved() {
       isCompleted: vehicleAvailabilty ? vehicleAvailabilty?.length > 0 : false,
     },
     { name: "Car details", isCompleted: isVehicleDetailsComplete },
-    // { name: "Car photos", isCompleted: carPhotosComplete },
-    // { name: "Payout", isCompleted: payoutComplete },
-    // { name: "Safety & quality standards", isCompleted: safetyStandardsComplete },
+    { name: "Car photos", isCompleted: vehiclePhotosUploaded },
+    { name: "Payout", isCompleted: payoutComplete },
+    { name: "Safety & quality standards", isCompleted: safetyStandardsComplete },
     // { name: "Submit your listing", isCompleted: listingSubmitted },
   ]
 

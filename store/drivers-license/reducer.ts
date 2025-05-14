@@ -1,7 +1,8 @@
 import apiClient from "@/config/api";
+import { prepareImageForUpload } from "@/utils";
 import getFileExtension from "@/utils/get-file-extension";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-const HOST_URL = process.env.EXPO_PUBLIC_APP_API_URL // 'http://localhost:3000/api'
+const HOST_URL = 'http://localhost:3000/api' // process.env.EXPO_PUBLIC_APP_API_URL // 'http://localhost:3000/api'
 
 type MediaAsset = {
   assetId: string;
@@ -29,17 +30,6 @@ type SubmitParams = {
   frontImage: DriverLicense['frontImage'];
   backImage: DriverLicense['backImage'];
 };
-
-// Helper to prepare image for form data
-function prepareImageForUpload(image: MediaAsset) {
-  // For React Native, we need to create an object with specific properties
-  // that FormData can properly handle for file uploads
-  return {
-    uri: image.uri,
-    name: image.fileName || `image.${getFileExtension(image)}`,
-    type: `image/${getFileExtension(image)}`,
-  };
-}
 
 export const submitDriversLicense = createAsyncThunk<any, SubmitParams>(
   "drivers_license/submitDriversLicense",

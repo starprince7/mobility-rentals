@@ -259,12 +259,12 @@ export default function CollectDriversLicense(): JSX.Element {
         <FixedBottomView className="h-[97px]">
           <NiceButton
             onPress={() => {
-              router.push(
-                "/(protected)/vehicle-listing-screens/confirm-mobile-number",
-              )
-              // dispatch<any>(
-              //   submitDriversLicense({ frontImage, backImage }),
+              // router.push(
+              //   "/(protected)/vehicle-listing-screens/confirm-mobile-number",
               // )
+              dispatch<any>(
+                submitDriversLicense({ frontImage, backImage }),
+              )
             }}
             loading={networkStatus === "loading"}
             disabled={!frontImage || !backImage}

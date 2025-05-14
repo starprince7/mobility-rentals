@@ -2,7 +2,7 @@ import apiClient from "@/config/api";
 import { MediaAsset } from "@/types/files";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Platform } from "react-native";
-const HOST_URL = process.env.EXPO_PUBLIC_APP_API_URL
+const HOST_URL = 'http://localhost:3000/api' // process.env.EXPO_PUBLIC_APP_API_URL
 
 interface ProfileImageStore {
   image: MediaAsset | null;

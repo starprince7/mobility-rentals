@@ -3,10 +3,20 @@ import { IVehicle } from "@/types";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { router } from 'expo-router'
 
-const HOST_URL = process.env.EXPO_PUBLIC_APP_API_URL
+const HOST_URL = "http://localhost:3000/api" // process.env.EXPO_PUBLIC_APP_API_URL
+
+// Define the photo structure
+type PhotoCategory = 'exterior' | 'interior' | 'damage';
+
+interface Photos {
+  exterior: string[];
+  interior: string[];
+  damage: string[];
+}
 
 interface IVehicleOnboarding {
-  autoApproveBookings: boolean;
+  vehiclePhotosUploaded?: boolean;
+  autoApproveBookings?: boolean;
   vehicleAvailabilty?: IVehicle['availabilityCalendar']
   // Vehicle details
   vehicleIdentificationNumber?: IVehicle['vehicleIdentificationNumber'];
@@ -19,8 +29,10 @@ interface IVehicleOnboarding {
   mileage?: string;
   fuelType?: 'petrol' | 'diesel' | 'electric' | 'hybrid' | '';
   transmission?: 'automatic' | 'manual' | '';
+  // Vehicle photos
+  photos?: Photos;
   // Boolean field that track of core fields below have been completed.
-  isComplete: boolean;
+  isComplete?: boolean;
   // Vehicle physical properties
   trim?: string;
   style?: string;
@@ -49,6 +61,7 @@ interface IVehicleOnboarding {
     distanceToBorder?: number
   }
   data?: {} | null
+  vechicleId?: string | null
 }
 
 const initialState: IVehicleOnboarding = {
@@ -59,7 +72,15 @@ const initialState: IVehicleOnboarding = {
   vehicleStatus: 'available',
   vehicleType: '',
   autoApproveBookings: false,
+  // indication of whether the vehicle photos have been uploaded.
+  vehiclePhotosUploaded: false,
   vehicleAvailabilty: [],
+  // Initialize photos object
+  photos: {
+    exterior: [],
+    interior: [],
+    damage: [],
+  },
   isComplete: false,
   fuelType: '',
   mileage: '',
@@ -88,6 +109,7 @@ const initialState: IVehicleOnboarding = {
   },
   data: null,
   error: null,
+  vechicleId: null,
 };
 
 // Async
@@ -97,7 +119,6 @@ type FetchParams = {
   city: string;
   country: string;
 };
-
 
 /**
  * Use to ensure that the users selected location
@@ -114,6 +135,59 @@ export const validateVehicleLocation = createAsyncThunk<any, FetchParams>(
       city,
       country,
     });
+  }
+);
+
+// Async thunk for uploading vehicle photos
+export const uploadVehiclePhotos = createAsyncThunk<
+  any, 
+  { photos: Photos, vehicleId?: string }
+>(
+  "vehicle_onboarding/uploadVehiclePhotos",
+  async ({ photos, vehicleId }) => {
+    try {
+      // Create a FormData object to handle the multipart/form-data upload
+      const formData = new FormData();
+      
+      // Process each category of photos
+      Object.entries(photos).forEach(([category, categoryPhotos]) => {
+        categoryPhotos.forEach((photoUri: any, index: number) => {
+          const fileType = photoUri.split('.').pop() || 'jpg';
+          const fileName = `vehicle_${category}_${index}.${fileType}`;
+            
+          // Append each photo to the form data
+          formData.append('photos', {
+            uri: photoUri,
+            name: fileName,
+            type: `image/${fileType}`,
+          } as any);
+          
+          // Include metadata about the photo
+          formData.append('metadata', JSON.stringify({
+            category,
+            index,
+            fileName,
+          }));
+        });
+      });
+      
+      // Add vehicle ID if available
+      if (vehicleId) {
+        formData.append('vehicleId', vehicleId);
+      }
+      
+      const response = await apiClient.post(`${HOST_URL}/vehicles/photos`, formData, {
+        headers: {
+          // Authorization: `Bearer ${"access_token"}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      
+      return response.data;
+    } catch (err) {
+      console.log("Photo upload error:", err);
+      throw err;
+    }
   }
 );
 
@@ -169,6 +243,33 @@ const slice = createSlice({
       state.zipCode = action.payload.zipCode;
       state.latitude = action.payload.latitude
       state.longitude = action.payload.longitude
+    },
+    // Add a single photo to a specific category
+    addVehiclePhoto: (state, action: PayloadAction<{ category: PhotoCategory, photoUri: string }>) => {
+      const { category, photoUri } = action.payload;
+      state.photos[category].push(photoUri);
+    },
+    // Remove a photo from a specific category by index
+    removeVehiclePhoto: (state, action: PayloadAction<{ category: PhotoCategory, index: number }>) => {
+      const { category, index } = action.payload;
+      state.photos[category] = state.photos[category].filter((_, i) => i !== index);
+    },
+    // Set all photos for a specific category
+    setVehiclePhotos: (state, action: PayloadAction<{ category: PhotoCategory, photos: string[] }>) => {
+      const { category, photos } = action.payload;
+      state.photos[category] = photos;
+    },
+    // Set the entire photos object
+    setAllVehiclePhotos: (state, action: PayloadAction<Photos>) => {
+      state.photos = action.payload;
+    },
+    // Clear all photos
+    clearVehiclePhotos: (state) => {
+      state.photos = {
+        exterior: [],
+        interior: [],
+        damage: [],
+      };
     },
     setLicensePlate: (state, action: PayloadAction<string>) => {
       state.licensePlate = action.payload;
@@ -239,6 +340,25 @@ const slice = createSlice({
         (state.requestStatus = "succeeded")
       }
     });
+    // ************* Upload Vehicle Photos with API *************
+    builder.addCase(uploadVehiclePhotos.pending, (state) => {
+      state.requestStatus = "loading";
+      state.vehiclePhotosUploaded = true
+    });
+    builder.addCase(uploadVehiclePhotos.rejected, (state, action) => {
+      state.requestStatus = "failed";
+      state.error = action.error.message!;
+      alert("Error uploading photos: " + action.error.message);
+    });
+    builder.addCase(uploadVehiclePhotos.fulfilled, (state, action) => {
+      state.requestStatus = "succeeded";
+      // You might want to update the photos with URLs from the server if needed
+      if (action.payload?.photoUrls) {
+        state.vehiclePhotosUploaded = true
+        // Handle server response if it returns updated URLs
+        // This depends on your API response structure
+      }
+    });
     // ************* Create Vehicle Listing with API *************
     builder.addCase(createVehicleListing.pending, (state, action) => {
       state.requestStatus = "loading";
@@ -255,6 +375,7 @@ const slice = createSlice({
       } else {
         (state.requestStatus = "succeeded")
         state.isComplete = true
+        state.vechicleId = action.payload?.id
         state.data = action.payload;
         router.push("/(protected)/vehicle-listing-screens/(collect-personal-info)/collect_profile_information");
       }
@@ -285,5 +406,11 @@ export const {
   setVehicleColor,
   setVehicleType,
   setSeatingCapacity,
+  // Export the new photo-related actions
+  addVehiclePhoto,
+  removeVehiclePhoto,
+  setVehiclePhotos,
+  setAllVehiclePhotos,
+  clearVehiclePhotos,
 } = slice.actions;
 export default slice.reducer;

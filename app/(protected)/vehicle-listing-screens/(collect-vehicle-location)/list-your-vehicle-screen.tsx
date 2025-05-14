@@ -51,7 +51,7 @@ export default function ListYourVehicleScreen() {
           </FancyText>
         </Pressable>
       </View>
-      <FixedBottomView className="absolute h-[100px] pt-3">
+      <FixedBottomView className="absolute h-[170px] pt-3">
         <NiceButton
           disabled={!city || !country}
           href="/(protected)/vehicle-listing-screens/(collect-vehicle-info)/collect-license-plate"
