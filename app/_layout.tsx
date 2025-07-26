@@ -74,6 +74,10 @@ const screens: ScreenConfig[] = [
 
 export default function RootLayout() {
   const [loaded] = useFonts({
+    Poppins: require("../assets/fonts/Poppins/Poppins-Regular.ttf"),
+    PoppinsBold: require("../assets/fonts/Poppins/Poppins-Bold.ttf"),
+    PoppinsMedium: require("../assets/fonts/Poppins/Poppins-Medium.ttf"),
+    PoppinsSemiBold: require("../assets/fonts/Poppins/Poppins-SemiBold.ttf"),
     Ledger: require("../assets/fonts/Ledger/Ledger-Regular.ttf"),
     AtypDisplayRegular: require("../assets/fonts/AtypDisplay/AtypDisplay-Regular.ttf"),
     AtypDisplayMedium: require("../assets/fonts/AtypDisplay/AtypDisplay-Medium.ttf"),

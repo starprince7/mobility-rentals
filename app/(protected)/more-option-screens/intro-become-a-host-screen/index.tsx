@@ -8,6 +8,7 @@ import { ScrollView } from "react-native-gesture-handler"
 import Octicons from "@expo/vector-icons/Octicons"
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
 import { useRouter } from "expo-router"
+import CloseFloatingButton from "@/components/ui/CloseFloatingButton"
 
 const HOW_IT_WORKS = [
   {
@@ -38,6 +39,7 @@ export default function IntroBecomeAHostScreen() {
   return (
     <>
       <ScrollView>
+        <CloseFloatingButton color="white" className="right-6 top-11" size={22}/>
         <NiceImage
           source={require("../../../../assets/images/become-a-host-image.jpg")}
           // style={{ width: 200, height: 400 }}

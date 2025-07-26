@@ -9,7 +9,7 @@ export function VehicleSummary() {
     useSelector(selectVehicleDetail);
   return (
     <View className="mx-6 my-3">
-      <StackView direction="horizontal" className="justify-between">
+      <StackView direction="horizontal" className="gap-5">
         <NiceImageCarousel
           images={vehicleDetail?.images}
           className="w-52 h-28 rounded-3xl"

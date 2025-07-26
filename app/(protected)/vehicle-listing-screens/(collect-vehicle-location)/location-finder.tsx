@@ -57,6 +57,7 @@ export default function LocationFinder() {
                 <TouchableOpacity
                   key={result.properties.place_id + i}
                   onPress={() => {
+                    console.log(JSON.stringify(result.properties))
                     dispatch(
                       setLocation({
                         city: result.properties.city!,

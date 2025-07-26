@@ -1,21 +1,18 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Platform } from "react-native";
 import React from "react";
 import GoBackButtonFloating from "@/components/ui/GoBackFloatingButton";
 import { FancyText } from "@/components/ui";
 import Octicons from "@expo/vector-icons/Octicons";
 import Divider from "@/components/ui/Divider";
+import CloseFloatingButton from "@/components/ui/CloseFloatingButton";
 
 export default function ExpandedHowItWorksScreen() {
+  const isAndroid = Platform.OS === "android";
   return (
     <View>
       {/* Hedader start */}
       <View className="bg-gray-200 mb-3">
-        <GoBackButtonFloating
-          size={20}
-          type="close"
-          color="black"
-          className="top-3 shadow-sm"
-        />
+        <CloseFloatingButton color="black" className={isAndroid ? "right-6 top-16" : "right-6 top-5"} size={22}/>
 
         <View className="">
           <FancyText className="text-center py-4 font-bold text-xl">

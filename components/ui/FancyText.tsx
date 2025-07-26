@@ -21,8 +21,8 @@ export function FancyText(props: Props) {
     alignItems = "center",
     style,
     fontBold,
-    iosFontFamily = "AtypTextMedium",
-    androidFontFamily = "AtypDisplayMedium",
+    iosFontFamily = "Poppins",
+    androidFontFamily = "Poppins",
     ...restProps
   } = props;
 
