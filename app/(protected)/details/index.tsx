@@ -17,12 +17,12 @@ import GoBackFloatingButton from "@/components/ui/GoBackFloatingButton"
 
 export default function VehicleDetailScreen() {
   const { vehicleDetail, networkRequestStatus } = useSelector(selectVehicleDetail)
-  const { id: vechicleId } = useLocalSearchParams()
+  const { _id: vehicleId } = useLocalSearchParams()
 
   // Fetch vehicle detail
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(fetchIntoStoreVehicleDetail({ id: vechicleId }) as any)
+    dispatch(fetchIntoStoreVehicleDetail({ id: vehicleId }) as any)
   }, [])
 
   if (networkRequestStatus === "loading")

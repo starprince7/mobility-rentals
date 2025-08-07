@@ -45,7 +45,8 @@ export default function CollectMobileNumber() {
     dispatch<any>(submitMobileVerificationCode(verificationCode))
     // Remove the code below since routing is handled by `React.useEffect`.
     router.push(
-      "/(protected)/vehicle-listing-screens/collect-goals-of-host",
+      // "/(protected)/vehicle-listing-screens/collect-goals-of-host",
+      "/(protected)/vehicle-listing-screens/collect-drivers-license",
     ) // Should comment out later
   }
 

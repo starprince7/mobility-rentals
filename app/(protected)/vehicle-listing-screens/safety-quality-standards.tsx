@@ -59,7 +59,12 @@ export default function SafetyQualityStandardsScreen() {
     router.push("/(protected)/vehicle-listing-screens/collect-payout-information")
   }
 
-  const isFormComplete = Object.values(safetyStandards).every((value) => value === true)
+  const isFormComplete =
+    safetyStandards.agreesToCleanlinessStandards &&
+    safetyStandards.agreesToDrivingRecordCheck &&
+    safetyStandards.agreesToInsuranceRequirements &&
+    safetyStandards.agreesToMaintenanceRequirements &&
+    safetyStandards.agreesToSafetyInspection
 
   return (
     <>

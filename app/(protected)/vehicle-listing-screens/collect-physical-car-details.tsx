@@ -55,10 +55,18 @@ export default function CollectPhysicalVehicleDetailsScreen() {
   }
 
   const handleMilesPerGallonChange = (text: string) => {
+    if (text === '') {
+      dispatch(setMilesPerGallon(0))
+      return
+    }
     dispatch(setMilesPerGallon(Number(text)))
   }
 
   const handleSeatingCapacityChange = (text: string) => {
+    if (text === '') {
+      dispatch(setSeatingCapacity(0))
+      return
+    }
     dispatch(setSeatingCapacity(Number(text)))
   }
 
@@ -84,7 +92,7 @@ export default function CollectPhysicalVehicleDetailsScreen() {
 
   const handleSubmit = () => {
     router.push(
-      "/(protected)/vehicle-listing-screens/(collect-vehicle-info)/collect_make_model_year",
+      "/(protected)/vehicle-listing-screens/collect-vehicle-photos",
     )
   }
 
@@ -173,7 +181,7 @@ export default function CollectPhysicalVehicleDetailsScreen() {
         options={{
           headerTitle: () => (
             <FancyText fontBold className="text-xl">
-              Vehicle Details
+              Car Details
             </FancyText>
           ),
         }}
@@ -198,7 +206,7 @@ export default function CollectPhysicalVehicleDetailsScreen() {
               View steps
             </NiceButton>
           </StackView>
-          <FancyText className="text-3xl font-bold mb-2">Vehicle Details</FancyText>
+          <FancyText className="text-3xl font-bold mb-2">Car Details</FancyText>
           <Text className="mb-6">
             Please provide specific details about your vehicle to help guests find
             the perfect match.

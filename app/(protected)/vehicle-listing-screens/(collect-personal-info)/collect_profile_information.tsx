@@ -46,6 +46,10 @@ export default function CollectProfileInformation() {
     }
   }
 
+  /**
+   * This effect subscribes to the redux store to know when image 
+   * upload has succeeded in other for screen navigation to happen
+   */
   React.useEffect(() => {
     if (networkStatus === "succeeded") {
       router.push(
@@ -53,6 +57,14 @@ export default function CollectProfileInformation() {
       )
     }
   }, [networkStatus])
+
+  const handleSaveAndContinue = () => {
+    // dispatch<any>(submitProfileImage(image)) // Disabled because No Live Backend Yet!
+    router.push(
+      "/(protected)/vehicle-listing-screens/confirm-mobile-number",
+      // "/(protected)/(verification)/send-email-verification"
+    )
+  }
 
   return (
     <>
@@ -114,13 +126,7 @@ export default function CollectProfileInformation() {
         </View>
         <FixedBottomView className="h-[97px]">
           <NiceButton
-            onPress={() => {
-              // dispatch<any>(submitProfileImage(image))
-              router.push(
-                "/(protected)/vehicle-listing-screens/confirm-mobile-number",
-                // "/(protected)/(verification)/send-email-verification"
-              )
-            }}
+            onPress={handleSaveAndContinue}
             loading={networkStatus === "loading"}
             disabled={!image}
           >

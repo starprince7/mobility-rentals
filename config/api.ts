@@ -2,12 +2,17 @@ import axios, { AxiosError, InternalAxiosRequestConfig, AxiosResponse } from "ax
 import * as Device from 'expo-device';
 import * as Application from 'expo-application';
 import packageJson from "@/package.json";
-import { StorageService } from "@/services";
+import { StorageService, ToastService } from "@/services";
 import { store } from "@/store";
 // import { logOutAction } from "@/store/auth/actions";
 import { Dimensions } from 'react-native';
 
 const API_ENDPOINT = process.env.EXPO_PUBLIC_APP_API_URL;
+
+if (!API_ENDPOINT) {
+  console.error('❌ EXPO_PUBLIC_APP_API_URL is not set in environment variables!');
+}
+
 const deviceId = Device.osName === 'Android' ? Application.getAndroidId() : Application.nativeApplicationVersion;
 
 const getDeviceInfo = () => ({
@@ -24,6 +29,7 @@ const getDeviceInfo = () => ({
 
 const apiClient = axios.create({
   baseURL: API_ENDPOINT,
+  timeout: 30000, // 30 seconds timeout
   headers: {
     "Content-Type": "application/json",
     "product-token": "",
@@ -42,6 +48,7 @@ apiClient.interceptors.request.use(
       request.headers.set('authorization', `Bearer ${token}`);
     }
 
+    // Get Device & App info per request
     const deviceId = Device.osName === 'Android' ? Application.getAndroidId() : Application.nativeApplicationVersion;
     const session = new Date().getTime();
     const { name, version } = packageJson;
@@ -64,8 +71,14 @@ apiClient.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
+    if (error.response) {
+      // Handle response error
+    } else if (error.request) {
+      ToastService.network.noConnection()
+    }
+
     if (error.response?.status && error.response?.status === 401) {
-    //   store?.dispatch(logOutAction());
+      //   store?.dispatch(logOutAction());
     }
     return Promise.reject(error);
   }

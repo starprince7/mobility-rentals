@@ -17,7 +17,6 @@ export const submitProfileImage = createAsyncThunk<any, ProfileImageStore['image
     if (!image) return alert("Pass an `image` to the redux action.");
 
     try {
-      // Create FormData instance
       const formData = new FormData();
 
       // Getting file extension from URI or fileName
@@ -37,26 +36,16 @@ export const submitProfileImage = createAsyncThunk<any, ProfileImageStore['image
       // Make sure the mime type is correct
       const mimeType = image.type || `image/${fileExtension}`;
 
-      // Prepare the image object for FormData
       const imageFile = {
         uri: Platform.OS === 'ios' ? image.uri.replace('file://', '') : image.uri,
         name: image.fileName || `profile_image.${fileExtension}`,
         type: mimeType
       };
 
-      console.log('Preparing image for upload:', {
-        uri: imageFile.uri.substring(0, 50) + '...',  // Truncate for logs
-        name: imageFile.name,
-        type: imageFile.type
-      });
-
-      // Append the image to FormData with the key 'image'
       formData.append('image', imageFile as any);
 
-      // Add additional metadata if needed
       if (image.assetId) formData.append('assetId', image.assetId);
 
-      // Send the FormData to the API using fetch
       const response = await apiClient.post(`${HOST_URL}/upload-profile-photo`, formData, {
         headers: {
           Accept: 'application/json',
@@ -64,7 +53,6 @@ export const submitProfileImage = createAsyncThunk<any, ProfileImageStore['image
           // Authorization: `Bearer ${auth_token}`
         }
       });
-      console.log('Upload successful:', response.data);
       return response;
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -72,6 +60,7 @@ export const submitProfileImage = createAsyncThunk<any, ProfileImageStore['image
     }
   }
 );
+
 const initialState: ProfileImageStore = {
   error: '',
   image: null,

@@ -3,8 +3,8 @@ import apiClient from "@/config/api";
 export async function fetchKey() {
   try {
     const { data } = await apiClient.get("/stripe/publishable-key");
-    console.log("stripe data:", data);
-    return data;
+    console.log("stripe data.publishableKey:", data.publishableKey);
+    return data.publishableKey;
   } catch (e) {
     console.log("Error fetching publishable key:", e);
   }

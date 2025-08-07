@@ -31,7 +31,8 @@ export const submitSafetyStandards = createAsyncThunk<any, AcceptSafetyStandards
       agreesToDrivingRecordCheck,
       agreesToInsuranceRequirements,
       agreesToMaintenanceRequirements,
-      agreesToSafetyInspection
+      agreesToSafetyInspection,
+      userId: ''
     }
     return apiClient.post(`${HOST_URL}/user/safety-standards`, { acceptedSafetyStandards: requestPayload })
   }

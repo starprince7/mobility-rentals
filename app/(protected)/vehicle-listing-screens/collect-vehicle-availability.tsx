@@ -1,18 +1,9 @@
 import React, { useState, useEffect } from "react"
 import { Stack, useRouter } from "expo-router"
-import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-  Alert,
-  Switch,
-  Platform,
-  Modal,
-} from "react-native"
+import { View, Text, ScrollView, Pressable, Alert, Switch, Platform, Modal } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import { Calendar, DateData } from "react-native-calendars"
-import { format, addDays, parseISO, isBefore } from "date-fns"
+import { format, addDays, parseISO, isBefore, isEqual } from "date-fns"
 
 import { FancyText, FixedBottomView, NiceButton, StackView } from "@/components/ui"
 import {
@@ -49,9 +40,7 @@ const recurringOptions = [
 export default function VehicleAvailabilityScreen(): React.ReactElement {
   const router = useRouter()
   const dispatch = useDispatch()
-  const { vehicleAvailabilty, autoApproveBookings } = useSelector(
-    selectVehicleOnboardingStore,
-  )
+  const { vehicleAvailabilty, autoApproveBookings } = useSelector(selectVehicleOnboardingStore)
 
   // State for calendar interaction (temporary state during user selection)
   const [markedDates, setMarkedDates] = useState<MarkedDates>({})
@@ -112,8 +101,7 @@ export default function VehicleAvailabilityScreen(): React.ReactElement {
 
       if (selectionStart) {
         // Ensure dates are in correct order
-        const start =
-          selectionStart < day.dateString ? selectionStart : day.dateString
+        const start = selectionStart < day.dateString ? selectionStart : day.dateString
         const end = selectionStart < day.dateString ? day.dateString : selectionStart
 
         // Add new date range
@@ -154,14 +142,14 @@ export default function VehicleAvailabilityScreen(): React.ReactElement {
       // Generate weekend dates (Saturday and Sunday) for next 3 months
       let currentDate = new Date(today)
 
-      // Find the first Saturday from today
+      // Find the first Saturday from today or after today
       while (currentDate.getDay() !== 6) {
         // 6 is Saturday
         currentDate = addDays(currentDate, 1)
       }
 
       // Loop through all weekends until we reach 3 months out
-      while (isBefore(currentDate, nextThreeMonths)) {
+      while (isBefore(currentDate, nextThreeMonths) || isEqual(currentDate, nextThreeMonths)) {
         // Add Saturday
         const saturdayStart = format(currentDate, "yyyy-MM-dd")
 
@@ -169,14 +157,16 @@ export default function VehicleAvailabilityScreen(): React.ReactElement {
         const sunday = addDays(currentDate, 1)
         const sundayEnd = format(sunday, "yyyy-MM-dd")
 
-        // Add weekend as a single range
-        newRanges.push({
-          startDate: saturdayStart,
-          endDate: sundayEnd,
-        })
+        // Only add the weekend if Sunday is still within our 3-month range
+        if (isBefore(sunday, nextThreeMonths) || isEqual(sunday, nextThreeMonths)) {
+          newRanges.push({
+            startDate: saturdayStart,
+            endDate: sundayEnd,
+          })
+        }
 
-        // Move to next weekend
-        currentDate = addDays(currentDate, 6)
+        // Move to next weekend (add 7 days to get from Saturday to Saturday)
+        currentDate = addDays(currentDate, 7)
       }
 
       dispatch(setVehicleAvailability(newRanges))
@@ -259,9 +249,9 @@ export default function VehicleAvailabilityScreen(): React.ReactElement {
     }
 
     // Navigate to next screen
-    // router.push(
-    //   "/(protected)/vehicle-listing-screens/(collect-vehicle-info)/pricing_screen",
-    // )
+    router.push(
+      "/(protected)/vehicle-listing-screens/collect-physical-car-details",
+    )
   }
 
   // Info modal for auto-approve bookings
@@ -313,15 +303,14 @@ export default function VehicleAvailabilityScreen(): React.ReactElement {
               </View>
 
               <Text className="text-gray-700 text-base leading-6 mb-3">
-                This feature is particularly useful when you're certain about your
-                availability and want to minimize the time spent managing your
-                listing.
+                This feature is particularly useful when you're certain about your availability
+                and want to minimize the time spent managing your listing.
               </Text>
 
               <Text className="text-gray-700 text-base leading-6 mb-3">
-                If you prefer to review each booking request individually (perhaps to
-                screen potential renters or check your schedule again), you should
-                keep this toggle turned off.
+                If you prefer to review each booking request individually (perhaps to screen
+                potential renters or check your schedule again), you should keep this toggle
+                turned off.
               </Text>
             </ScrollView>
 
@@ -345,19 +334,14 @@ export default function VehicleAvailabilityScreen(): React.ReactElement {
           ),
         }}
       />
-      <StackView
-        direction="horizontal"
-        className="fixed justify-between px-6 py-4 top-0 left-0"
-      >
+      <StackView direction="horizontal" className="fixed justify-between px-6 py-4 top-0 left-0">
         <FancyText fontBold>3 of 12</FancyText>
         <NiceButton
           variant="text"
           size="small"
           className="bg-zinc-200 !py-2 px-5"
           onPress={() =>
-            router.push(
-              "/(protected)/vehicle-listing-screens/listing-steps-involved",
-            )
+            router.push("/(protected)/vehicle-listing-screens/listing-steps-involved")
           }
         >
           View steps
@@ -368,9 +352,7 @@ export default function VehicleAvailabilityScreen(): React.ReactElement {
 
       <ScrollView className="flex-1 px-6 pt-4">
         <View className="gap-y-4 pb-24 mb-14">
-          <FancyText className="text-3xl font-bold">
-            Set your vehicle's availability
-          </FancyText>
+          <FancyText className="text-3xl font-bold">Set your vehicle's availability</FancyText>
           <Text className="text-gray-600 mb-2">
             Select the dates when your car will be available for guests to book.
           </Text>
@@ -425,10 +407,7 @@ export default function VehicleAvailabilityScreen(): React.ReactElement {
                       : "border-gray-300"
                   }`}
                 >
-                  <StackView
-                    direction="horizontal"
-                    className="items-center justify-between"
-                  >
+                  <StackView direction="horizontal" className="items-center justify-between">
                     <FancyText>{option.label}</FancyText>
                     {selectedRecurring === option.id && (
                       <View className="h-6 w-6 rounded-full bg-indigo-500 items-center justify-center">
@@ -443,10 +422,7 @@ export default function VehicleAvailabilityScreen(): React.ReactElement {
 
           {/* Auto-approve toggle with info icon */}
           <View className="mt-6 bg-gray-50 p-4 rounded-lg">
-            <StackView
-              direction="horizontal"
-              className="items-center justify-between gap-2.5"
-            >
+            <StackView direction="horizontal" className="items-center justify-between gap-2.5">
               <View className="flex-1 flex-row items-center">
                 <View className="flex-1">
                   <FancyText fontBold className="text-lg">
@@ -471,11 +447,7 @@ export default function VehicleAvailabilityScreen(): React.ReactElement {
                   true: themeColors.primary,
                 }}
                 thumbColor={
-                  Platform.OS === "ios"
-                    ? "#ffffff"
-                    : autoApproveBookings
-                    ? "#ffffff"
-                    : "#f3f4f6"
+                  Platform.OS === "ios" ? "#ffffff" : autoApproveBookings ? "#ffffff" : "#f3f4f6"
                 }
               />
             </StackView>
@@ -484,9 +456,7 @@ export default function VehicleAvailabilityScreen(): React.ReactElement {
           {/* Clear button */}
           {vehicleAvailabilty && vehicleAvailabilty.length > 0 && (
             <Pressable onPress={clearSelection} className="mt-4 py-2 items-center">
-              <Text className="text-red-600 font-semibold">
-                Clear all availability
-              </Text>
+              <Text className="text-red-600 font-semibold">Clear all availability</Text>
             </Pressable>
           )}
         </View>

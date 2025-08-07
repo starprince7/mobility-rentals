@@ -21,6 +21,7 @@ import {
   setGoalOptions,
   setSelectedGoals,
 } from "@/store/host/reducer"
+import { formatToCurrency } from "@/utils"
 
 export default function CollectHostGoalsScreen(): React.ReactElement {
   const router = useRouter()
@@ -59,7 +60,7 @@ export default function CollectHostGoalsScreen(): React.ReactElement {
   const handleSubmit = (): void => {
     // Goals are already saved to store.
     router.push(
-      "/(protected)/vehicle-listing-screens/(collect-vehicle-info)/collect_make_model_year",
+      "/(protected)/vehicle-listing-screens/collect-vehicle-availability",
     )
   }
 
@@ -80,7 +81,7 @@ export default function CollectHostGoalsScreen(): React.ReactElement {
         direction="horizontal"
         className="fixed justify-between px-6 py-4 top-0 left-0"
       >
-        <FancyText fontBold>1 of 12</FancyText>
+        <FancyText fontBold>5 of 12</FancyText>
         <NiceButton
           variant="text"
           size="small"
@@ -163,7 +164,7 @@ export default function CollectHostGoalsScreen(): React.ReactElement {
                 Potential earnings
               </FancyText>
               <Text className="text-gray-700">
-                Hosts in your area earn an average of $500-$800 per
+                Hosts in your area earn an average of {formatToCurrency(500000, "NGN")} - {formatToCurrency(1000000, "NGN")} per
                 month sharing their vehicle.
               </Text>
             </View>

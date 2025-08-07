@@ -1,8 +1,7 @@
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { IVehicle } from "@/types";
+import apiClient from "@/config/api";
 
-const HOST_URL = process.env.EXPO_PUBLIC_APP_API_URL
 
 export function useVehicleDetail(id: string | string[] | number) {
   return useQuery<IVehicle>({
@@ -14,12 +13,12 @@ export function useVehicleDetail(id: string | string[] | number) {
 }
 
 export async function fetchVehicleDetail(id: string | string[] | number) {
+  if (!id) return null
   try {
-    const hostUri = `${HOST_URL}/vehicle/${id}`;
-    const { data } = await axios.get(hostUri);
+    const { data } = await apiClient.get(`/vehicles/${id}`);
 
     return data;
   } catch (e: any) {
     console.log("Error fetching from server:", e);
   }
-}
+} 

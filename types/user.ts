@@ -1,79 +1,122 @@
+import { IVehicle } from "./vehicle";
+
 export interface IUser {
-  id: number;
+  // Core user identification
+  id: string;
+  email: string;
+  username?: string;
   firstName: string;
   lastName: string;
-  email: string;
-  phone: string;
-  profileImage?: string;
-  dateJoined: string;
-  address?: Address;
+  phoneNumber: string;
 
-  // User verification
-  verified: boolean;
-  identityVerified: boolean;
-  drivingLicenseVerified: boolean;
+  // Authentication and security
+  hashedPassword?: string;
+  role: 'renter' | 'owner' | 'admin';
+  accountStatus: 'active' | 'suspended' | 'pending' | 'deleted';
 
-  // User as owner
-  ownedVehicles?: number[]; // IDs of vehicles they own
-  // accountDetails?: BankAccountDetails;
-  preferredPaymentMethod?: string;
+  // Personal information
+  dateOfBirth?: Date;
+  nationality?: string;
+  primaryLanguage?: string;
 
-  // User as renter
-  rentalHistory?: RentalRecord[];
-  savedVehicles?: number[]; // IDs of vehicles saved/favorited
-  drivingLicense?: DrivingLicense;
+  // Location and contact details
+  primaryAddress?: {
+    street: string;
+    city: string;
+    state: string;
+    country: string;
+    postalCode: string;
+  };
 
-  // Ratings and reviews
-  overallRating?: number;
-  reviewsAsOwner?: Review[];
-  reviewsAsRenter?: Review[];
+  // Verification and documentation
+  drivingLicense?: {
+    number: string;
+    issueDate: Date;
+    expiryDate: Date;
+    issuingCountry: string;
+    verified: boolean;
+  };
 
-  // Preferences
-  // notificationPreferences?: NotificationPreferences;
-  // communicationPreferences?: CommunicationPreferences;
+  // User preferences
+  preferences?: {
+    preferredVehicleTypes: IVehicle['vehicleType'][];
+    preferredPickupLocations: string[];
+    communicationPreferences: {
+      email: boolean;
+      sms: boolean;
+      push: boolean;
+    };
+  };
+
+  // Rental-related information
+  rentalProfile?: {
+    totalRentals: number;
+    currentRentals: number;
+    completedRentals: number;
+    canceledRentals: number;
+    averageRating: number;
+  };
+
+  // Financial information
+  paymentMethods?: {
+    cardType: 'credit' | 'debit';
+    lastFourDigits: string;
+    expiryDate: string;
+    isDefault: boolean;
+  }[];
+
+  // Vehicle ownership (if applicable)
+  ownedVehicles?: number[]; // Array of vehicle IDs
+
+  // Rental history
+  rentalHistory?: RentalHistory[];
+
+  // Trust and verification
+  trustScore?: number;
+  verificationStatus?: {
+    emailVerified: boolean;
+    phoneVerified: boolean;
+    identityVerified: boolean;
+    drivingLicenseVerified: boolean;
+  };
+
+  // Additional user metadata
+  registrationDate?: Date;
+  lastLoginDate?: Date;
+
+  // Optional social integration
+  socialAccounts?: {
+    platform: 'google' | 'facebook' | 'apple';
+    socialId: string;
+  }[];
+
+  // Wallet system (updated from accountCredit)
+  accountWallet: number;
+
+  // Reference to admin record if user is an admin
+  adminId?: number;
+
+  // Notifications and communication
+  notifications?: {
+    id: number;
+    type: 'booking' | 'reminder' | 'promotion' | 'system';
+    message: string;
+    date: Date;
+    read: boolean;
+  }[];
 }
 
-export interface RentalRecord {
-  rentalId: number;
+// Rental history interface
+interface RentalHistory {
   vehicleId: number;
   startDate: string;
   endDate: string;
-  totalCost: number;
-  status: 'upcoming' | 'active' | 'completed' | 'cancelled';
-  ownerRating?: number;
-  vehicleRating?: number;
-  ownerReview?: string;
-  vehicleReview?: string;
+  rating: number;
+  comment?: string;
+  totalCost?: number;
   mileageDriven?: number;
   incidents?: string[];
-}
-
-export interface DrivingLicense {
-  number: string;
-  country: string;
-  state?: string;
-  expiryDate: string;
-  issuedDate: string;
-  verified: boolean;
-}
-
-export interface Review {
-  id: number;
-  reviewerId: number;
-  rating: number;
-  comment: string;
-  date: string;
-  response?: string;
-}
-
-export interface Address {
-  street: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-  latitude?: number;
-  longitude?: number;
+  returnCondition?: 'excellent' | 'good' | 'fair' | 'poor';
 }
 
 export interface SignUpData {

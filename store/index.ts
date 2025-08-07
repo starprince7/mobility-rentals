@@ -10,9 +10,11 @@ import driversLicenseReducer from "./drivers-license/reducer";
 import hostReducer from "./host/reducer";
 import payoutReducer from "./payout-data/reducer";
 import safetyStandardReducer from "./accept-safety-standard/reducer";
+import authReducer from "./auth-data/reducer";
 
 export const store = configureStore({
   reducer: {
+    Auth: authReducer,
     BookingInformation: bookingReducer,
     VehicleDetail: vehicleInformationReducer,
     VehicleOnboarding: vehicleOnboardingReducer,

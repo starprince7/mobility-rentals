@@ -123,18 +123,18 @@ export default function CollectVehiclePhotosScreen() {
     }
 
     try {
-      // Upload photos to API
-      await dispatch<any>(
-        uploadVehiclePhotos({
-          photos,
-          vehicleId: vechicleId!,
-        }),
-      ).unwrap()
+      // Upload photos to API when Backend is Live
+      // await dispatch<any>(
+      //   uploadVehiclePhotos({
+      //     photos,
+      //     vehicleId: vechicleId!,
+      //   }),
+      // ).unwrap()
 
       // Navigate to next screen after successful upload
-      //   router.push(
-      //     "/(protected)/vehicle-listing-screens/(collect-vehicle-info)/collect_pricing",
-      //   )
+        router.push(
+          "/(protected)/vehicle-listing-screens/collect-payout-information",
+        )
     } catch (error) {
       console.error("Failed to upload photos:", error)
     }
@@ -150,7 +150,7 @@ export default function CollectVehiclePhotosScreen() {
         options={{
           headerTitle: () => (
             <FancyText fontBold className="text-xl">
-              Vehicle Photos
+              Car Photos
             </FancyText>
           ),
         }}

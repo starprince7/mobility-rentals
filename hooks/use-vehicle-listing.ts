@@ -1,10 +1,20 @@
-import axios from "axios";
+
 import { useQuery } from "@tanstack/react-query";
-import { IAvailableVehicles } from "@/types";
+import { IVehicle } from "@/types";
 import apiClient from "@/config/api";
 
+interface ListingApiResponse {
+  vehicles: IVehicle[],
+  pagination: {
+    total: number,
+    page: number,
+    limit: number,
+    totalPages: number,
+  },
+}
+
 export function useVehicleListing() {
-  return useQuery<IAvailableVehicles[]>({
+  return useQuery<ListingApiResponse>({
     queryKey: ["availableVehicleListing"],
     queryFn: fetchVehicleListing,
     retry: 3,
@@ -14,8 +24,8 @@ export function useVehicleListing() {
 
 async function fetchVehicleListing() {
   try {
-    const { data } = await apiClient.get("/vehicle/listing");
-
+    const { data } = await apiClient.get("/vehicles");
+    console.log('Vehicles Listing:', data)
     return data;
   } catch (e: any) {
     console.log("Error fetching from server:", e);

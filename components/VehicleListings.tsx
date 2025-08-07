@@ -31,7 +31,7 @@ export function VehicleListings() {
           <VehicleCard {...(item as unknown as IVehicle)} index={index} />
         )}
         estimatedItemSize={5}
-        data={data}
+        data={data?.vehicles}
         contentContainerStyle={{ paddingBottom: 100 }}
       />
     </View>

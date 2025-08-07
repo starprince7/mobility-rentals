@@ -7,13 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 // icons
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
 
-import {
-  FancyText,
-  FixedBottomView,
-  NiceButton,
-  NiceImage,
-  StackView,
-} from "@/components/ui"
+import { FancyText, FixedBottomView, NiceButton, NiceImage, StackView } from "@/components/ui"
 
 // Redux
 import {
@@ -31,14 +25,10 @@ type ImageSide = "front" | "back"
 export default function CollectDriversLicense(): JSX.Element {
   const dispatch = useDispatch()
   const { backImage, frontImage } = useSelector(selectDriversLicense)
-  const [networkStatus, setNetworkStatus] = useState<
-    "idle" | "loading"
-  >("idle")
+  const [networkStatus, setNetworkStatus] = useState<"idle" | "loading">("idle")
 
   // Function to handle image selection with options for camera or gallery
-  const handleImageSelect = async (
-    side: ImageSide,
-  ): Promise<void> => {
+  const handleImageSelect = async (side: ImageSide): Promise<void> => {
     const options = ["Take a photo", "Choose from gallery", "Cancel"]
     Alert.alert(
       `${side === "front" ? "Front" : "Back"} of license`,
@@ -64,14 +54,10 @@ export default function CollectDriversLicense(): JSX.Element {
   // Function to capture image using camera
   const captureImage = async (side: ImageSide): Promise<void> => {
     try {
-      const { status } =
-        await ImagePicker.requestCameraPermissionsAsync()
+      const { status } = await ImagePicker.requestCameraPermissionsAsync()
 
       if (status !== "granted") {
-        Alert.alert(
-          "Permission Denied",
-          "Sorry, we need camera permissions to make this work!",
-        )
+        Alert.alert("Permission Denied", "Sorry, we need camera permissions to make this work!")
         return
       }
 
@@ -82,11 +68,7 @@ export default function CollectDriversLicense(): JSX.Element {
         quality: 0.8,
       })
 
-      if (
-        !result.canceled &&
-        result.assets &&
-        result.assets.length > 0
-      ) {
+      if (!result.canceled && result.assets && result.assets.length > 0) {
         if (side === "front") {
           dispatch(setFrontImage(result.assets[0] as MediaAsset))
         } else {
@@ -95,24 +77,17 @@ export default function CollectDriversLicense(): JSX.Element {
       }
     } catch (error) {
       console.error("Error capturing image:", error)
-      Alert.alert(
-        "Error",
-        "Failed to capture image. Please try again.",
-      )
+      Alert.alert("Error", "Failed to capture image. Please try again.")
     }
   }
 
   // Function to pick image from gallery
   const pickImage = async (side: ImageSide): Promise<void> => {
     try {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync()
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
 
       if (status !== "granted") {
-        Alert.alert(
-          "Permission Denied",
-          "Sorry, we need gallery permissions to make this work!",
-        )
+        Alert.alert("Permission Denied", "Sorry, we need gallery permissions to make this work!")
         return
       }
 
@@ -123,11 +98,7 @@ export default function CollectDriversLicense(): JSX.Element {
         quality: 0.8,
       })
 
-      if (
-        !result.canceled &&
-        result.assets &&
-        result.assets.length > 0
-      ) {
+      if (!result.canceled && result.assets && result.assets.length > 0) {
         if (side === "front") {
           dispatch(setFrontImage(result.assets[0] as MediaAsset))
         } else {
@@ -136,10 +107,7 @@ export default function CollectDriversLicense(): JSX.Element {
       }
     } catch (error) {
       console.error("Error picking image:", error)
-      Alert.alert(
-        "Error",
-        "Failed to select image. Please try again.",
-      )
+      Alert.alert("Error", "Failed to select image. Please try again.")
     }
   }
 
@@ -152,22 +120,22 @@ export default function CollectDriversLicense(): JSX.Element {
     handleImageSelect("back")
   }
 
+  const handleNextAction = (): void => {
+    dispatch<any>(submitDriversLicense({ frontImage, backImage }))
+    router.push("/(protected)/vehicle-listing-screens/collect-goals-of-host")
+  }
+
   return (
     <>
       <Stack.Screen options={{ title: "Driver's License" }} />
-      <StackView
-        direction="horizontal"
-        className="fixed justify-between px-6 py-4 top-0 left-0"
-      >
+      <StackView direction="horizontal" className="fixed justify-between px-6 py-4 top-0 left-0">
         <FancyText fontBold>4 of 12</FancyText>
         <NiceButton
           variant="text"
           size="small"
           className="bg-zinc-200 !py-2 px-5"
           onPress={() =>
-            router.push(
-              "/(protected)/vehicle-listing-screens/listing-steps-involved",
-            )
+            router.push("/(protected)/vehicle-listing-screens/listing-steps-involved")
           }
         >
           View steps
@@ -175,9 +143,7 @@ export default function CollectDriversLicense(): JSX.Element {
       </StackView>
       <View className="flex-1">
         <View className="flex-1 px-6 pt-2 gap-y-4">
-          <FancyText className="text-3xl font-bold">
-            Driver's license photo
-          </FancyText>
+          <FancyText className="text-3xl font-bold">Driver's license photo</FancyText>
           <FancyText className="text-zinc-700">
             Capture the front and back of your driver's license
           </FancyText>
@@ -199,9 +165,7 @@ export default function CollectDriversLicense(): JSX.Element {
                     resizeMode="cover"
                   />
                   <View className="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 rounded">
-                    <Text className="text-white font-medium">
-                      Front
-                    </Text>
+                    <Text className="text-white font-medium">Front</Text>
                   </View>
                 </View>
               ) : (
@@ -211,9 +175,7 @@ export default function CollectDriversLicense(): JSX.Element {
                     size={64}
                     color="#71717a"
                   />
-                  <Text className="text-zinc-600 font-medium mt-2">
-                    Front
-                  </Text>
+                  <Text className="text-zinc-600 font-medium mt-2">Front</Text>
                 </View>
               )}
             </Pressable>
@@ -231,9 +193,7 @@ export default function CollectDriversLicense(): JSX.Element {
                     resizeMode="cover"
                   />
                   <View className="absolute bottom-2 left-2 bg-black bg-opacity-50 px-2 py-1 rounded">
-                    <Text className="text-white font-medium">
-                      Back
-                    </Text>
+                    <Text className="text-white font-medium">Back</Text>
                   </View>
                 </View>
               ) : (
@@ -243,9 +203,7 @@ export default function CollectDriversLicense(): JSX.Element {
                     size={64}
                     color="#71717a"
                   />
-                  <Text className="text-zinc-600 font-medium mt-2">
-                    Back
-                  </Text>
+                  <Text className="text-zinc-600 font-medium mt-2">Back</Text>
                 </View>
               )}
             </Pressable>
@@ -258,14 +216,7 @@ export default function CollectDriversLicense(): JSX.Element {
 
         <FixedBottomView className="h-[97px]">
           <NiceButton
-            onPress={() => {
-              // router.push(
-              //   "/(protected)/vehicle-listing-screens/confirm-mobile-number",
-              // )
-              dispatch<any>(
-                submitDriversLicense({ frontImage, backImage }),
-              )
-            }}
+            onPress={handleNextAction}
             loading={networkStatus === "loading"}
             disabled={!frontImage || !backImage}
           >

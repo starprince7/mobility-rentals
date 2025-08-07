@@ -47,7 +47,9 @@
         {
           "photosPermission": "The app requires access your photos for you to add profile image."
         }
-      ]
+      ],
+      "expo-font",
+      "expo-web-browser"
     ],
     "permissions": [
       "INTERNET"

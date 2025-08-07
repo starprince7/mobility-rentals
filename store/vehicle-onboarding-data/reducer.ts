@@ -140,7 +140,7 @@ export const validateVehicleLocation = createAsyncThunk<any, FetchParams>(
 
 // Async thunk for uploading vehicle photos
 export const uploadVehiclePhotos = createAsyncThunk<
-  any, 
+  any,
   { photos: Photos, vehicleId?: string }
 >(
   "vehicle_onboarding/uploadVehiclePhotos",
@@ -148,20 +148,20 @@ export const uploadVehiclePhotos = createAsyncThunk<
     try {
       // Create a FormData object to handle the multipart/form-data upload
       const formData = new FormData();
-      
+
       // Process each category of photos
       Object.entries(photos).forEach(([category, categoryPhotos]) => {
         categoryPhotos.forEach((photoUri: any, index: number) => {
           const fileType = photoUri.split('.').pop() || 'jpg';
           const fileName = `vehicle_${category}_${index}.${fileType}`;
-            
+
           // Append each photo to the form data
           formData.append('photos', {
             uri: photoUri,
             name: fileName,
             type: `image/${fileType}`,
           } as any);
-          
+
           // Include metadata about the photo
           formData.append('metadata', JSON.stringify({
             category,
@@ -170,19 +170,19 @@ export const uploadVehiclePhotos = createAsyncThunk<
           }));
         });
       });
-      
+
       // Add vehicle ID if available
       if (vehicleId) {
         formData.append('vehicleId', vehicleId);
       }
-      
+
       const response = await apiClient.post(`${HOST_URL}/vehicles/photos`, formData, {
         headers: {
           // Authorization: `Bearer ${"access_token"}`,
           'Content-Type': 'multipart/form-data',
         },
       });
-      
+
       return response.data;
     } catch (err) {
       console.log("Photo upload error:", err);
@@ -247,17 +247,19 @@ const slice = createSlice({
     // Add a single photo to a specific category
     addVehiclePhoto: (state, action: PayloadAction<{ category: PhotoCategory, photoUri: string }>) => {
       const { category, photoUri } = action.payload;
-      state.photos[category].push(photoUri);
+      state.photos?.[category].push(photoUri);
     },
     // Remove a photo from a specific category by index
     removeVehiclePhoto: (state, action: PayloadAction<{ category: PhotoCategory, index: number }>) => {
       const { category, index } = action.payload;
-      state.photos[category] = state.photos[category].filter((_, i) => i !== index);
+      if (state.photos)
+        state.photos[category] = state.photos[category].filter((_, i) => i !== index);
     },
     // Set all photos for a specific category
     setVehiclePhotos: (state, action: PayloadAction<{ category: PhotoCategory, photos: string[] }>) => {
       const { category, photos } = action.payload;
-      state.photos[category] = photos;
+      if (state.photos)
+        state.photos[category] = photos;
     },
     // Set the entire photos object
     setAllVehiclePhotos: (state, action: PayloadAction<Photos>) => {

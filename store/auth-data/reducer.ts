@@ -1,5 +1,6 @@
 /* Auth Reducer file */
 import * as authApi from "@/http/auth";
+import { StorageService } from "@/services";
 import { IUser, SignInData, SignUpData } from "@/types/user";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
@@ -8,7 +9,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 interface IAuth {
   phone: string;
   user: null | IUser;
-  isLoggedIn: boolean;
+  isAuthenticated: boolean;
   authRequestStatus: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -26,16 +27,28 @@ export const signUpWithCredentials = createAsyncThunk<
 // 2.
 export const signInWithCredentials = createAsyncThunk<any, SignInData>(
   "auth/signInWithCredential",
-  async (signInData) => await authApi.signInWithCredentials({ ...signInData })
+  async (signInData) => {
+    const { data } = await authApi.signInWithCredentials(signInData)
+    return data
+  }
 );
 
 // ************************ Async End. ***************************
 
 const initialState: IAuth = {
   phone: "",
-  user: null,
+  user: {
+    id: '',
+    firstName: '',
+    lastName: '',
+    role: 'renter',
+    email: '',
+    accountStatus: 'pending',
+    accountWallet: 0,
+    phoneNumber: ''
+  },
   error: "",
-  isLoggedIn: false,
+  isAuthenticated: false,
   authRequestStatus: "idle",
 };
 
@@ -47,23 +60,20 @@ const slice = createSlice({
       state.phone = action.payload;
     },
     signOutAction: (state) => {
-      state.isLoggedIn = false;
+      state.isAuthenticated = false;
       state.authRequestStatus = "idle";
       state.error = "";
       state.user = null;
-      state.validationError = {
-        validationError: false,
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-      };
     },
     signInAction: (state, action: PayloadAction<IUser>) => {
-      state.isLoggedIn = true;
+      state.isAuthenticated = true;
       state.authRequestStatus = "idle";
       state.error = "";
       state.user = action.payload as any;
+    },
+    clearError: (state) => {
+      state.error = "";
+      state.authRequestStatus = "idle";
     },
   },
   extraReducers(builder) {
@@ -80,7 +90,7 @@ const slice = createSlice({
         state.authRequestStatus = "failed";
       } else {
         state.authRequestStatus = "succeeded";
-        state.isLoggedIn = true;
+        state.isAuthenticated = true;
         state.user = action.payload.user;
         state.error = "";
       }
@@ -95,11 +105,12 @@ const slice = createSlice({
     });
     builder.addCase(signInWithCredentials.fulfilled, (state, action) => {
       if (action.payload?.error) {
-        (state.authRequestStatus = "failed"), (state.isLoggedIn = false);
+        (state.authRequestStatus = "failed"), (state.isAuthenticated = false);
         state.error = action.payload?.error;
       } else {
-        (state.authRequestStatus = "succeeded"), (state.isLoggedIn = true);
-        state.user = action.payload;
+        (state.authRequestStatus = "succeeded"), (state.isAuthenticated = true);
+        StorageService.setAuthToken(action.payload.token)
+        state.user = action.payload.user;
       }
     });
 
@@ -107,8 +118,8 @@ const slice = createSlice({
 });
 
 const authReducer = slice.reducer;
-export const { signOutAction, signInAction, setPhone } = slice.actions;
+export const { signOutAction, signInAction, setPhone, clearError } = slice.actions;
 export default authReducer;
 
 // selector
-export const selectAuth = (store: any) => store.auth as IAuth;
+export const selectAuth = (store: any) => store.Auth as IAuth;

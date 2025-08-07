@@ -52,7 +52,7 @@ export default function CollectPayoutInfoScreen() {
 
     // Navigate to next screen
     router.push(
-      "/(protected)/vehicle-listing-screens/(collect-vehicle-info)/collect_make_model_year",
+      "/(protected)/vehicle-listing-screens/safety-quality-standards",
     )
   }
 
@@ -84,7 +84,7 @@ export default function CollectPayoutInfoScreen() {
           </StackView>
           <View className="gap-y-0 pb-24">
             <FancyText className="text-3xl font-bold">Rental Amount & Payout Details</FancyText>
-            <Text className="text-zinc-600">
+            <Text className="text-zinc-600 my-5">
               Add your desired rental price. All payments will be in Nigerian Naira (₦).
             </Text>
 
@@ -111,7 +111,7 @@ export default function CollectPayoutInfoScreen() {
               )}
             </Pressable>
 
-            <Text className="text-zinc-600">
+            <Text className="text-zinc-600 my-6 px-2">
               Add your bank account details to receive payments when guests book your vehicle. All
               payments will be in Nigerian Naira (₦).
             </Text>
@@ -119,7 +119,7 @@ export default function CollectPayoutInfoScreen() {
             {/* Bank Name */}
             <Pressable
               onPress={() => handleInputFocus(bankNameRef)}
-              className="bg-zinc-50 rounded-t-lg px-1"
+              className="rounded-t-lg bg-white px-4 py-1"
             >
               <StackView
                 direction="horizontal"
@@ -147,7 +147,7 @@ export default function CollectPayoutInfoScreen() {
             {/* Account Number Input */}
             <Pressable
               onPress={() => handleInputFocus(accountNumberRef)}
-              className="bg-zinc-50 rounded-t-lg px-1"
+              className="bg-white px-4 py-1 rounded-t-lg"
             >
               <StackView
                 direction="horizontal"
@@ -172,7 +172,7 @@ export default function CollectPayoutInfoScreen() {
             </Pressable>
 
             {/* Account Name Input */}
-            <Pressable onPress={() => handleInputFocus(accountNameRef)}>
+            <Pressable onPress={() => handleInputFocus(accountNameRef)} className="bg-white px-4 py-1">
               <StackView
                 direction="horizontal"
                 className="justify-between border-b border-zinc-300 py-4"
@@ -182,6 +182,7 @@ export default function CollectPayoutInfoScreen() {
                   ref={accountNameRef}
                   placeholder="Account holder name"
                   className="rounded-md p-2 text-right"
+                  keyboardType="default"
                   value={payoutInfo.accountName}
                   onChangeText={(text) => dispatch(setAccountName(text))}
                   returnKeyType="next"
@@ -191,10 +192,10 @@ export default function CollectPayoutInfoScreen() {
             </Pressable>
 
             {/* BVN Input */}
-            <Pressable onPress={() => handleInputFocus(bvnRef)}>
+            <Pressable onPress={() => handleInputFocus(bvnRef)} className="bg-white px-4">
               <StackView
                 direction="horizontal"
-                className="justify-between border-b border-zinc-300 py-4"
+                className="justify-between border-zinc-300 py-4"
               >
                 <FancyText className="text-lg">BVN</FancyText>
                 <TextInput
