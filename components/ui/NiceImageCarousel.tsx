@@ -5,11 +5,13 @@ import { NiceImage } from "./NiceImage";
 import { StackView } from "./StackView";
 
 interface Props {
-  images: string[] | undefined;
+  images?: string[] | string;
   className: string;
   sharedTransitionTag?: string;
   carouselHeight?: number;
   carouselWidth?: number;
+  initialIndex?: number;
+  onIndexChange?: (index: number) => void;
 }
 
 export function NiceImageCarousel({
@@ -18,9 +20,11 @@ export function NiceImageCarousel({
   carouselHeight,
   carouselWidth,
   sharedTransitionTag,
+  initialIndex = 0,
+  onIndexChange,
 }: Props) {
   const carouselRef = useRef<ICarouselInstance>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(initialIndex || 0);
   const width = Dimensions.get("window").width;
 
   if (!images) {
@@ -33,6 +37,14 @@ export function NiceImageCarousel({
   const scrollToIndex = (index: number) => {
     carouselRef.current?.scrollTo({ index, animated: true });
   };
+
+  // Ensure the carousel lands on the intended initial slide on mount
+  React.useEffect(() => {
+    if (initialIndex && carouselRef.current) {
+      carouselRef.current.scrollTo({ index: initialIndex, animated: false });
+      setCurrentIndex(initialIndex);
+    }
+  }, [initialIndex]);
 
   return (
     <View
@@ -49,10 +61,17 @@ export function NiceImageCarousel({
         autoPlay={false}
         data={imageArray}
         scrollAnimationDuration={1000}
-        onSnapToItem={(index: number) => setCurrentIndex(index)}
+        onSnapToItem={(index: number) => {
+          setCurrentIndex(index);
+          onIndexChange?.(index);
+        }}
         renderItem={({ item, index, animationValue }) => (
           <NiceImage
-            sharedTransitionTag={sharedTransitionTag}
+            sharedTransitionTag={
+              index === currentIndex && sharedTransitionTag
+                ? `${sharedTransitionTag}-${index}`
+                : undefined
+            }
             source={{ uri: item as string }}
             className={className}
           />

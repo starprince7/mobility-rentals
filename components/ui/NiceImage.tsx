@@ -24,6 +24,8 @@ interface CachedImageProps extends Omit<AnimatedImageProps, "source"> {
   minFileSize?: number;
   // Debounce time in ms for source changes
   debounceTime?: number;
+  // Reanimated shared element tag
+  sharedTransitionTag?: string;
 }
 
 // Helper type for source comparison
@@ -388,7 +390,12 @@ export function NiceImage({
     <Animated.Image
       {...props}
       style={style}
-      entering={isVisible && !hasError ? FadeIn.duration(500) : undefined}
+      // If a sharedTransitionTag is present, avoid entering animation to prevent flicker
+      entering={
+        isVisible && !hasError && !("sharedTransitionTag" in (props as any) && (props as any).sharedTransitionTag)
+          ? FadeIn.duration(500)
+          : undefined
+      }
       source={{ uri: finalUri }}
       onLoad={() => {
         // console.log("Image loaded successfully:", finalUri);

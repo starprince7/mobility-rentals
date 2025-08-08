@@ -50,7 +50,7 @@ export default function VehicleDetailScreen() {
           carouselHeight={850}
         />
         <View className="mx-6 mt-4">
-          <FancyText className="text-gray-600">{vehicleDetail?.ownerId}</FancyText>
+          {/* <FancyText className="text-gray-600">{vehicleDetail?.ownerId}</FancyText> */}
         </View>
         <VehicleModel
           make={vehicleDetail?.make as string}
